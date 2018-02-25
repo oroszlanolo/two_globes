@@ -12,13 +12,23 @@ class Globe{
 			this.B = 255;
 		}
 		this.G = 0;
+		this.history = [];
 	}
 	move(x,y){
+		this.history.push(createVector(this.x,this.y));
+		if(this.history.length > 10){
+			this.history.splice(0,1);
+		}
 		this.x = x;
 		this.y = y;
 	}
 	draw(){
 		drawCirkle(this.x,this.y,this.r,this.R,this.G,this.B);
+		for(var i = 0; i < this.history.length; i+=2){
+			var r = 2.5 * this.r / (this.history.length - i+2);
+			var A = 255 * (i + 1) / this.history.length;
+			drawCirkle(this.history[i].x,this.history[i].y,r,this.R,this.G,this.B,A);
+		}
 	}
 };
 
@@ -39,6 +49,8 @@ class Globes{
 		this.r = this.maxR;
 		this.speed = this.basicSpeed;
 		this.move(x,y);
+		this.blue.history = [];
+		this.red.history = [];
 	}
 	mini(){
 		if(this.r > this.maxR / 3){
