@@ -104,6 +104,7 @@ function drawObjects(){
 
 function mouseClicked(){
 	if(!running && !hasWon && myStart.inside(mouseX,mouseY)){
+		myGlobe.reset(mouseX,mouseY);
 		running = true;
 	}
 	if(hasWon){
