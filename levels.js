@@ -1,60 +1,37 @@
-function addLevel(num){
-    switch(num){
-        case 1:
-            addLevel1();
+function loadLevel(num){
+    if(num > levelData.levels.length){
+        return;
+    }
+    num--;
+    var sPoint = levelData.levels[num].start;
+    myStart = new startingPoint(sPoint.x,sPoint.y,sPoint.r);
+	myGlobe.reset(myStart.x,myStart.y);
+
+    var ePoint = levelData.levels[num].end;
+    myEnd = new EndPoint(ePoint.x,ePoint.y,ePoint.r);
+
+    var obs = levelData.levels[num].objects;
+    level = [];
+    for(var i = 0; i < obs.length; i++){
+        switch(obs[i].type){
+            case "line":
+            loadLine(obs[i]);
             break;
-        case 2:
-            addLevel2();
+            case "rectangle":
+            loadRect(obs[i]);
             break;
-        case 3:
-            addLevel3();
-            break;
-        case 4:
-            addLevel4();
-            break;
-        default:
-            print("Level " + num + " not found.");
-            break;
+        }
     }
     addBorder();
 }
 
-function addLevel1(){
-	myStart = new startingPoint(200,HEIGHT/2,15);
-	myGlobe.reset(myStart.x,myStart.y);
-    myEnd = new EndPoint(600,300,60);
-    
-    level = [];
+function loadLine(ln){
+    var tmpLine = new Line(ln.x1,ln.y1,ln.x2,ln.y2,ln.color);
+    level.push(tmpLine);
 }
-
-function addLevel4(){
-	myStart = new startingPoint(75,75,15);
-	myGlobe.reset(myStart.x,myStart.y);
-    myEnd = new EndPoint(700,300,50);
-    
-    level = [];
-	level.push(new Line(150,0,150,450));
-	level.push(new Line(150,450,300,450,1));
-	level.push(new Line(300,450,450,450,0));
-	level.push(new Line(450,300,450,600));
-    level.push(new Line(200,300,450,300));
-}
-function addLevel3(){
-	myStart = new startingPoint(WIDTH/2,HEIGHT/4,20);
-	myGlobe.reset(myStart.x,myStart.y);
-    myEnd = new EndPoint(WIDTH/2,HEIGHT/4*3,40);
-    
-    level = [];
-    level.push(new Rectangle(65,240,WIDTH-65,360));
-}
-
-function addLevel2(){
-    myStart = new startingPoint(97,94,12.041594578792296);
-	myGlobe.reset(myStart.x,myStart.y);
-    myEnd = new EndPoint(683,512,58.034472514187634);
-    level = [];
-    level.push(new Line(2,202,601,201));
-    level.push(new Line(799,404,190,401));
+function loadRect(rt){
+    var tmpRect = new Rectangle(rt.x1,rt.y1,rt.x2,rt.y2,rt.color);
+    level.push(tmpRect);
 }
 
 function addBorder(){

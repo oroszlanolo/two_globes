@@ -108,6 +108,37 @@ class startingPoint{
 		return dist(this.x,this.y,x,y) <= this.r;
 	}
 	draw(){
-		drawStart(this.x,this.y,this.r);
+		fill(100,100,100,200);
+		stroke(100,100,100,200);
+		rect(0,0,WIDTH,HEIGHT);
+		drawCirkle(this.x,this.y,this.r,255,255,255);
 	}
+}
+//Drawing functions
+
+function drawCirkle(x,y,r,R,G,B,A = 255){
+	stroke(R,G,B);
+	fill(R,G,B,A);
+	ellipse(x,y,2*r);
+}
+function drawRect(x1,y1,x2,y2,R,G,B, A = 100){
+	stroke(R,G,B);
+	fill(R,G,B,A);
+	rect(x1,y1,x2-x1,y2-y1);
+}
+
+function drawLine(x1,y1,x2,y2,R,G,B,A=255){
+	stroke(R,G,B,A);
+	line(x1,y1,x2,y2);
+}
+
+function drawNextLevel(){
+	fill(230,230,230,100);
+	stroke(0,200,0,100);
+	rect(0,0,WIDTH,HEIGHT);
+	fill(0,150,0,100);
+	stroke(0,150,0,180);
+	textSize(72);
+	textAlign(CENTER);
+	text("NEXT LEVEL",WIDTH/2,HEIGHT/2);
 }
