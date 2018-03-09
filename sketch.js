@@ -1,10 +1,12 @@
+//TODO: map loading from separate JSON files
+
 let colorEnum={
 	Red: 0,
 	Blue: 1,
 	Black: 2
 }
 
-const WIDTH = 800;
+const WIDTH = 840;
 const HEIGHT = 600;
 
 let levelData;
@@ -35,7 +37,7 @@ function setup() {
 	background(200);
 	fill(255,0,0);
 	stroke(255,0,0);
-	myGlobe = new Globes(0,0,50);
+	myGlobe = new Globes(0,0,40);
 	running = false;
 	hasWon = false;
 	deaths = 0;
@@ -103,7 +105,7 @@ function drawObjects(){
 }
 
 function mouseClicked(){
-	if(!running && !hasWon && myStart.inside(mouseX,mouseY)){
+	if(!running && !hasWon && myStart.crash(new Cirkle(mouseX,mouseY,0))){
 		myGlobe.reset(mouseX,mouseY);
 		running = true;
 	}

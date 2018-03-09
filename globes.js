@@ -23,7 +23,7 @@ class Globe{
 		this.y = y;
 	}
 	draw(){
-		drawCirkle(this.x,this.y,this.r,this.R,this.G,this.B);
+		drawCirkle(this.x,this.y,this.r,this.R,this.G,this.B,200);
 		for(var i = 0; i < this.history.length; i+=2){
 			var r = 2.5 * this.r / (this.history.length - i+2);
 			var A = 255 * (i + 1) / this.history.length;
