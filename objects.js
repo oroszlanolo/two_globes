@@ -117,6 +117,7 @@ class Cirkle{
 			this.B = 0;
 		}
 		this.G = 0;
+		this.A = 100;
 	}
 	move(x,y){
 		this.x = roundTo5(x);
@@ -132,11 +133,7 @@ class Cirkle{
 	  return (this.color != cirkle.color && dist(this.x,this.y,cirkle.x,cirkle.y) < this.r+cirkle.r);
 	}
 	draw(){
-		if(this.type == "cirkle"){
-			drawCirkle(this.x,this.y,this.r,this.R,this.G,this.B, 100, "");
-		}else{
-			drawCirkle(this.x,this.y,this.r,this.R,this.G,this.B, 100, this.type.toUpperCase());
-		}
+		drawCirkle(this.x,this.y,this.r,this.R,this.G,this.B, this.A, this.text);
 	}
 }
 
@@ -144,6 +141,7 @@ class EndPoint extends Cirkle{
 	constructor(xVal,yVal,r){
 		super(xVal,yVal,r);
 		this.type = "end";
+		this.text = "END";
 		this.R = 255;
 		this.G = 255;
 		this.B = 0;
@@ -154,9 +152,11 @@ class startingPoint extends Cirkle{
 	constructor(xVal,yVal,r){
 		super(xVal,yVal,r);
 		this.type = "start";
+		this.text = "START";
 		this.R = 255;
 		this.G = 255;
 		this.B = 255;
+		this.A = 200;
 	}
 	crash(cirkle){
 		return dist(this.x,this.y,cirkle.x,cirkle.y) <= this.r;
@@ -196,20 +196,23 @@ function drawNextLevel(){
 	text("NEXT LEVEL",WIDTH/2,HEIGHT/2);
 }
 function drawCirkle(x,y,r,R,G,B,A, tt){
+
+	if(tt == "START"){
+		fill(100,100,100,200);
+		stroke(100,100,100,200);
+		rect(0,0,WIDTH,HEIGHT);
+	}
+
 	stroke(R,G,B);
 	fill(R,G,B,A);
-
 	ellipse(x,y,2*r);
+
+
 	if(tt){
 		stroke(0,0,0);
 		fill(0,0,0);
 		textAlign(CENTER,CENTER);
 		textSize(r/2);
 		text(tt,x,y);
-		if(tt == "START"){
-			fill(100,100,100,200);
-			stroke(100,100,100,200);
-			rect(0,0,WIDTH,HEIGHT);
-		}
 	}
 }

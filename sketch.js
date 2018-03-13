@@ -1,79 +1,92 @@
-//TODO: map loading from separate JSON files
+//TODO: GUI reposition on resize
 
 let colorEnum={
 	Red: 0,
 	Blue: 1,
 	Black: 2
 }
+let gameStateEnum = {
+	MainMenu : 0,
+	LevelSelect : 1,
+	Running : 2
+}
 
 const WIDTH = 840;
 const HEIGHT = 600;
 
-let levelData;
+let myCanvas;
 
+//Globes
 let myGlobe;
+//objects
 let level = [];
-let currentLevel;
 let myEnd;
 let myStart;
-let running;
-let hasWon;
-let deaths;
 
-let levelP;
-let deathsP;
+//Boolean
+let running;
+let isLevelLoading;
+let hasWon;
+
+//Integer
+let deaths;
+let levelCount;
+let currentLevel;
+let gameState;
+let canvasX;
+let canvasY;
 
 function preload(){
-	levelData = loadJSON("levels.json");
+	loadJSON("levels/levelInfo.json",loaded => {
+		levelCount = loaded.levelCount;
+	})
 }
 
+
 function setup() {
-	createCanvas(WIDTH,HEIGHT);
+	myCanvas = createCanvas(WIDTH,HEIGHT);
+	myCanvas.parent("canvasD");
 	currentLevel = 1;
-	levelP = createP('LEVEL ' + currentLevel);
-	levelP.style("padding-left","10px");
-	deathsP = createP('Deaths: ' + 0);
-	deathsP.style("padding-left","10px");
-	background(200);
-	fill(255,0,0);
-	stroke(255,0,0);
+	deaths = 0;
+	setupGUIElements();
 	myGlobe = new Globes(0,0,40);
 	running = false;
 	hasWon = false;
-	deaths = 0;
-	loadLevel(currentLevel);
+	isLevelLoading = false;
+	gameState = gameStateEnum.MainMenu;
+	// loadLevel(currentLevel);
 }
 
 function draw() {
-	if(running){
-		if(mouseIsPressed){
-			myGlobe.mini();
-		}else{
-			myGlobe.maxi();
-		}
-		myGlobe.move(mouseX,mouseY);
+	switch(gameState){
+		case gameStateEnum.MainMenu:
+			drawMainMenu();
+			break;
+		case gameStateEnum.LevelSelect:
+			drawLevelSelect();
+			break;
+		case gameStateEnum.Running:
+			drawGame();
+			break;
+	}
+}
+function drawMainMenu(){
+	background(255);
+}
+function drawLevelSelect(){
 
-		if(isCrashed()){
-			background(200,0,0);
-			running = false;
-			deaths++;
-			deathsP.html("Deaths: " + deaths);
-		}else{
-			background(200);
-		}
-		if(won()){
-			background(20,255,20);
-			running = false;
-			hasWon = true;
-		}
+}
+
+function drawGame(){
+	if(isLevelLoading){
+		return;
 	}
-	drawObjects();
-	if(myEnd){
-		myEnd.draw();
+	if(running){
+		moveThings();
 	}
-	if(myGlobe){
-		myGlobe.draw();
-	}
+
+	drawThings();
+
 	if(!running){
 		if(hasWon){
 			drawNextLevel();
@@ -82,6 +95,30 @@ function draw() {
 				myStart.draw();
 			}
 		}
+	}
+}
+
+function moveThings(){
+	if(mouseIsPressed){
+		myGlobe.mini();
+	}else{
+		myGlobe.maxi();
+	}
+	myGlobe.move(mouseX,mouseY);
+
+	if(isCrashed()){
+		background(200,0,0);
+		mainMenuButt.show();
+		running = false;
+		deaths++;
+		deathsP.html("Deaths: " + deaths);
+	}else{
+		background(2255);
+	}
+	if(won()){
+		background(20,255,20);
+		running = false;
+		hasWon = true;
 	}
 }
 
@@ -98,32 +135,54 @@ function isCrashed(){
 	return false;
 }
 
-function drawObjects(){
+function drawThings(){
 	for(let obj of level){
 		obj.draw();
+	}
+
+	if(myEnd){
+		myEnd.draw();
+	}
+	if(myGlobe){
+		myGlobe.draw();
 	}
 }
 
 function mouseClicked(){
-	if(!running && !hasWon && myStart.crash(new Cirkle(mouseX,mouseY,0))){
-		myGlobe.reset(mouseX,mouseY);
-		running = true;
-	}
-	if(hasWon){
-		startNewLevel();
+	//TODO: ??
+	switch(gameState){
+		case gameStateEnum.MainMenu:
+			break;
+		case gameStateEnum.LevelSelect:
+			break;
+		case gameStateEnum.Running:
+			clickedGame();
+			break;
 	}
 }
 
-function startNewLevel(){
-	running = false;
-	hasWon = false;
-	currentLevel ++;
-	if(currentLevel > levelData.levels.length){
-		currentLevel = 1;
-	}
-	levelP.html('LEVEL ' + currentLevel);
-	loadLevel(currentLevel);
+function clickedMenu(){
+
 }
+function clickedLevelSelect(){
+
+}
+
+function clickedGame(){
+	if(!myStart){
+		return;
+	}
+	if(!running && !hasWon && myStart.crash(new Cirkle(mouseX,mouseY,0))){
+		myGlobe.reset(mouseX,mouseY);
+		running = true;
+		mainMenuButt.hide();
+	}
+	if(hasWon){
+		startNewLevel();
+		mainMenuButt.show();
+	}
+}
+
 
 
 
