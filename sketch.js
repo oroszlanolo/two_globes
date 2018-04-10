@@ -1,4 +1,8 @@
 //TODO: GUI reposition on resize
+//TODO: time measuring
+//TODO: Menu anumation
+//TODO: button style upgrade
+//TODO: WIN sceen
 
 let colorEnum={
 	Red: 0,
